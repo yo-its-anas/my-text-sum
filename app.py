@@ -1,19 +1,19 @@
 import streamlit as st
 from transformers import pipeline
 
-# Initialize the Hugging Face pipelines with specified models
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-sentiment_analyzer = pipeline("sentiment-analysis")
+# Use smaller models to speed up loading
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+sentiment_analyzer = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
-# Define the summarization function
+# Summarization function
 def summarize_text(text):
-    summary = summarizer(text, max_length=150, min_length=50, do_sample=False)
+    summary = summarizer(text, max_length=130, min_length=30, do_sample=False)
     return summary[0]['summary_text']
 
-# Define the sentiment analysis function
+# Sentiment analysis function
 def analyze_sentiment(text):
     sentiment = sentiment_analyzer(text)
-    return sentiment[0]['label']  # 'POSITIVE' or 'NEGATIVE'
+    return sentiment[0]['label']
 
 # Streamlit app interface
 st.title("Text Summarizer & Sentiment Analyzer")
